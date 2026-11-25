@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovJobAlert - National Recruitment Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .navbar {
+            background: #ffffff;
+            height: 70px;
+            padding: 0 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 19px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .brand-badge {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        .nav-links { display: flex; align-items: center; gap: 26px; }
+        .nav-links a { color: #475569; text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
+        .nav-links a:hover { color: #2563eb; }
+        .nav-user { display: flex; align-items: center; gap: 14px; }
+        .btn-nav { padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .btn-nav-primary { background: #2563eb; color: #fff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+        .btn-nav-primary:hover { background: #1d4ed8; }
+        
+        .container { max-width: 1340px; margin: 24px auto; padding: 0 20px; flex: 1; }
+        
+        .alert-msg { padding: 14px 20px; border-radius: 10px; font-size: 14px; margin-bottom: 22px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+        /* Professional Footer to eliminate empty space */
+        .site-footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 40px 45px 25px 45px;
+            margin-top: 60px;
+        }
+        .footer-grid {
+            max-width: 1340px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .footer-col h4 { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-col a { display: block; color: #64748b; text-decoration: none; font-size: 13px; margin-bottom: 10px; font-weight: 500; transition: color 0.2s; }
+        .footer-col a:hover { color: #2563eb; }
+        .footer-bottom {
+            max-width: 1340px;
+            margin: 20px auto 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <a href="{% url 'home' %}" class="nav-brand">
+            <div class="brand-badge"><i class="fa-solid fa-building-columns"></i></div>
+            <span>GovJobAlert<span style="color:#2563eb;">.in</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="{% url 'home' %}"><i class="fa-solid fa-compass"></i> All Openings</a>
+            <a href="{% url 'home' %}?category=Railway">Railways</a>
+            <a href="{% url 'home' %}?category=Banking">Banking</a>
+            <a href="{% url 'home' %}?category=SSC">SSC</a>
+            <a href="{% url 'home' %}?category=Defense">Defense</a>
+            <a href="{% url 'resizer' %}" style="color: #059669; font-weight: 700;"><i class="fa-solid fa-crop-simple"></i> Photo Resizer</a>
+            <a href="/admin/" target="_blank" style="color: #ea580c; font-weight: 700;"><i class="fa-solid fa-lock"></i> Admin</a>
+        </nav>
+        <div class="nav-user">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #1e293b; text-decoration: none; padding: 7px 14px; background: #e2e8f0; border-radius: 20px;">
+                    <i class="fa-solid fa-circle-user" style="color: #2563eb; font-size: 17px;"></i>
+                    {{ user.username }}
+                </a>
+                <a href="{% url 'logout' %}" class="btn-nav" style="color: #ef4444; border: 1px solid #fee2e2; background: #fff;">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-nav" style="color: #334155;">Sign In</a>
+                <a href="{% url 'register' %}" class="btn-nav btn-nav-primary">Create Account</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-msg alert-{{ message.tags }}">
+                    <i class="fa-solid fa-bell"></i> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <div class="brand-badge" style="width:30px; height:30px; font-size:13px;"><i class="fa-solid fa-building-columns"></i></div>
+                    <span style="font-weight: 800; font-size: 17px;">GovJobAlert.in</span>
+                </div>
+                <p style="font-size: 13px; color: #64748b; line-height: 1.6; max-width: 380px;">
+                    India's leading government recruitment tracking portal. Providing real-time notifications, official syllabi, exam schedules, and direct application links across all state and central ministries.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Top Categories</h4>
+                <a href="{% url 'home' %}?category=Railway">Railway Recruitment Board</a>
+                <a href="{% url 'home' %}?category=SSC">Staff Selection Commission</a>
+                <a href="{% url 'home' %}?category=Banking">IBPS & SBI Bank PO</a>
+                <a href="{% url 'home' %}?category=Defense">UPSC NDA, CDS & AFCAT</a>
+            </div>
+            <div class="footer-col">
+                <h4>Candidate Tools</h4>
+                <a href="{% url 'resizer' %}">Sarkari Photo & Sign Resizer</a>
+                <a href="{% url 'profile' %}">Email Alert Preferences</a>
+                <a href="{% url 'home' %}">Application Deadline Tracker</a>
+                <a href="/admin/">Admin Post Portal</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support & Verification</h4>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">All job openings are cross-verified with the Gazette of India & official government commission websites.</p>
+                <span style="font-size: 12px; font-weight: 700; color: #059669;"><i class="fa-solid fa-circle-check"></i> SSL 256-Bit Encrypted</span>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 GovJobAlert Management System. Designed for Indian Government Job Aspirants.</span>
+            <span>Made with Django & SQLite</span>
+        </div>
+    </footer>
+</body>
+</html>

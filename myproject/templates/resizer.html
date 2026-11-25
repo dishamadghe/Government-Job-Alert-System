@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 650px; margin: 40px auto; background: white; padding: 36px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+    <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 50px; height: 50px; background: #ecfdf5; color: #059669; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px auto;">
+            <i class="fa-solid fa-crop-simple"></i>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; color: #0f172a;">Sarkari Form Photo & Sign Resizer</h2>
+        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Instantly resize & compress your image between 20KB to 50KB for online government application forms.</p>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px;">1. Select Image Type</label>
+        <select id="typeSelect" style="width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px;">
+            <option value="photo">Passport Photo (Standard 3.5cm x 4.5cm - Max 50KB)</option>
+            <option value="sign">Official Signature (Standard 3.5cm x 1.5cm - Max 20KB)</option>
+        </select>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+        <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px;">2. Upload Your Image</label>
+        <input type="file" id="imageInput" accept="image/*" style="width: 100%; padding: 10px; border: 2px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; cursor: pointer;">
+    </div>
+
+    <button onclick="processImage()" style="width: 100%; background: #2563eb; color: white; padding: 13px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Resize & Compress Now
+    </button>
+
+    <div id="resultArea" style="display: none; margin-top: 26px; padding-top: 20px; border-top: 1px solid #f1f5f9; text-align: center;">
+        <p style="font-size: 13px; font-weight: 700; color: #166534; margin-bottom: 12px;"><i class="fa-solid fa-circle-check"></i> Image Successfully Optimized!</p>
+        <img id="previewImg" src="" style="max-height: 160px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <br>
+        <a id="downloadLink" href="" download="sarkari_form_image.jpg" style="display: inline-block; background: #059669; color: white; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 13px; text-decoration: none;">
+            <i class="fa-solid fa-download"></i> Download Optimized Image
+        </a>
+    </div>
+</div>
+
+<canvas id="canvas" style="display: none;"></canvas>
+
+<script>
+function processImage() {
+    const fileInput = document.getElementById('imageInput');
+    if (!fileInput.files[0]) {
+        alert('Please choose an image file first.');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.getElementById('canvas');
+            const type = document.getElementById('typeSelect').value;
+            
+            // Dimensions for Photo vs Signature
+            if (type === 'photo') {
+                canvas.width = 350;
+                canvas.height = 450;
+            } else {
+                canvas.width = 350;
+                canvas.height = 150;
+            }
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            // Standard Sarkari Compression (JPEG 0.72 quality ~25-45KB)
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+            document.getElementById('previewImg').src = dataUrl;
+            document.getElementById('downloadLink').href = dataUrl;
+            document.getElementById('resultArea').style.display = 'block';
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | GovAlert{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <p class="tagline">YOUR GOVERNMENT JOB SEARCH STARTS HERE</p>
+
+        <h1>
+            Find Your Next
+            <span>Government Job</span>
+        </h1>
+
+        <p class="hero-text">
+            Discover the latest government vacancies, check eligibility,
+            and never miss an important application deadline.
+        </p>
+
+        <div class="search-box">
+            <input type="text"
+                   placeholder="Search job, department or qualification...">
+
+            <button>Search Jobs</button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features container">
+
+    <div class="feature-card">
+        <div class="icon">🔎</div>
+        <h3>Find Jobs</h3>
+        <p>Search government vacancies according to your requirements.</p>
+    </div>
+
+    <div class="feature-card">
+        <div class="icon">🔔</div>
+        <h3>Expiry Alerts</h3>
+        <p>Stay updated about jobs whose application deadlines are near.</p>
+    </div>
+
+    <div class="feature-card">
+        <div class="icon">⭐</div>
+        <h3>Save Jobs</h3>
+        <p>Bookmark important government jobs for quick access later.</p>
+    </div>
+
+</section>
+
+
+<section class="container latest">
+
+    <div class="section-heading">
+        <div>
+            <p class="small-title">OPPORTUNITIES</p>
+            <h2>Latest Government Jobs</h2>
+        </div>
+
+        <a href="#">View All →</a>
+    </div>
+        <div class="job-grid">
+
+    {% for job in jobs %}
+
+    <div class="job-card">
+
+        <div class="job-top">
+            <div class="job-icon">🏛️</div>
+            <button class="save">☆</button>
+        </div>
+
+        <h3>{{ job.title }}</h3>
+
+        <p class="department">
+            {{ job.department }}
+        </p>
+
+        <div class="details">
+            <span>🎓 {{ job.qualification }}</span>
+            <span>📍 {{ job.location }}</span>
+        </div>
+
+        <p class="last-date">
+            Last Date: <strong>{{ job.last_date }}</strong>
+        </p>
+
+        <a href="#" class="details-btn">
+            View Details →
+        </a>
+
+    </div>
+
+    {% empty %}
+
+    <p>No government jobs available.</p>
+
+    {% endfor %}
+
+</div>
+
+        <div class="job-card">
+
+            <div class="job-top">
+                <div class="job-icon">🚆</div>
+                <button class="save">☆</button>
+            </div>
+
+            <h3>Railway Recruitment 2026</h3>
+
+            <p class="department">
+                Indian Railways
+            </p>
+
+            <div class="details">
+                <span>🎓 12th / Graduate</span>
+                <span>📍 Maharashtra</span>
+            </div>
+
+            <p class="last-date">
+                Last Date: <strong>30 Sept 2026</strong>
+            </p>
+
+            <a href="#" class="details-btn">
+                View Details →
+            </a>
+
+        </div>
+
+
+        <div class="job-card">
+
+            <div class="job-top">
+                <div class="job-icon">🏦</div>
+                <button class="save">☆</button>
+            </div>
+
+            <h3>Banking Recruitment 2026</h3>
+
+            <p class="department">
+                Public Sector Banking
+            </p>
+
+            <div class="details">
+                <span>🎓 Graduate</span>
+                <span>📍 All India</span>
+            </div>
+
+            <p class="last-date">
+                Last Date: <strong>05 Oct 2026</strong>
+            </p>
+
+            <a href="#" class="details-btn">
+                View Details →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+    .hero {
+        min-height: 500px;
+        background: linear-gradient(135deg, #172554, #1e3a8a);
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+        padding: 70px 7%;
+    }
+
+    .hero-content {
+        max-width: 850px;
+        margin: auto;
+    }
+
+    .tagline {
+        color: #38bdf8;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 18px;
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        line-height: 1.15;
+        margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+        color: #38bdf8;
+    }
+
+    .hero-text {
+        max-width: 650px;
+        margin: auto;
+        line-height: 1.7;
+        color: #dbeafe;
+    }
+
+    .search-box {
+        background: white;
+        padding: 8px;
+        border-radius: 12px;
+        display: flex;
+        max-width: 700px;
+        margin: 35px auto 0;
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 15px;
+        font-size: 15px;
+    }
+
+    .search-box button {
+        border: none;
+        background: #38bdf8;
+        padding: 0 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        margin-top: -45px;
+        position: relative;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 28px;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .icon {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+        margin-bottom: 8px;
+    }
+
+    .feature-card p {
+        color: #64748b;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .latest {
+        padding-top: 70px;
+    }
+
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 25px;
+    }
+
+    .small-title {
+        color: #0284c7;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .section-heading h2 {
+        margin-top: 5px;
+    }
+
+    .section-heading a {
+        color: #0284c7;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .job-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .job-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 24px;
+        transition: 0.2s;
+    }
+
+    .job-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .job-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .job-icon {
+        font-size: 28px;
+    }
+
+    .save {
+        border: none;
+        background: #f1f5f9;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .job-card h3 {
+        margin-bottom: 8px;
+    }
+
+    .department {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 18px 0;
+    }
+
+    .details span {
+        background: #f1f5f9;
+        padding: 7px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+
+    .last-date {
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .details-btn {
+        display: block;
+        text-align: center;
+        background: #172554;
+        color: white;
+        padding: 11px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+
+        .hero h1 {
+            font-size: 38px;
+        }
+
+        .features,
+        .job-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .features {
+            margin-top: 25px;
+        }
+
+        .search-box {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .search-box button {
+            padding: 13px;
+        }
+    }
+
+</style>
+
+{% endblock %}

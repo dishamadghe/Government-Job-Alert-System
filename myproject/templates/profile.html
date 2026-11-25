@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .profile-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; }
+    .profile-card { background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0; }
+    .avatar-circle {
+        width: 70px; height: 70px; background: #2563eb; color: white;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 28px; font-weight: 800; margin: 0 auto 12px;
+    }
+    .form-grp { margin-bottom: 14px; }
+    .form-grp label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+    .form-ctrl { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; box-sizing: border-box; }
+    .btn-save { width: 100%; background: #2563eb; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
+</style>
+
+<div class="profile-grid">
+    <!-- LEFT: PROFILE FORM -->
+    <div class="profile-card">
+        <div style="text-align: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 16px;">
+            <div class="avatar-circle">{{ user.username|make_list|first|upper }}</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a;">{{ user.username }}</h3>
+            <p style="font-size: 12px; color: #64748b;">{{ user.email }}</p>
+            <span style="font-size: 11px; background: #dcfce7; color: #15803d; padding: 3px 10px; border-radius: 20px; font-weight: 700; display: inline-block; margin-top: 6px;">
+                <i class="fa-solid fa-bell"></i> Email Alerts Active
+            </span>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-grp">
+                <label><i class="fa-solid fa-envelope"></i> Email for Job Alerts</label>
+                <input type="email" name="email" value="{{ user.email }}" required class="form-ctrl">
+            </div>
+
+            <div class="form-grp">
+                <label><i class="fa-solid fa-graduation-cap"></i> Highest Qualification</label>
+                <select name="qualification" class="form-ctrl">
+                    <option value="10th" {% if profile.qualification == '10th' %}selected{% endif %}>10th / 12th Pass</option>
+                    <option value="Graduate" {% if profile.qualification == 'Graduate' %}selected{% endif %}>Graduate (BA, B.Sc, B.Com, B.E.)</option>
+                    <option value="Engineering" {% if profile.qualification == 'Engineering' %}selected{% endif %}>Engineering (B.Tech / Diploma)</option>
+                </select>
+            </div>
+
+            <div class="form-grp">
+                <label><i class="fa-solid fa-bullseye"></i> Target Government Sector</label>
+                <select name="category" class="form-ctrl">
+                    <option value="Railway" {% if profile.preferred_category == 'Railway' %}selected{% endif %}>Indian Railways (RRB)</option>
+                    <option value="SSC" {% if profile.preferred_category == 'SSC' %}selected{% endif %}>SSC</option>
+                    <option value="Banking" {% if profile.preferred_category == 'Banking' %}selected{% endif %}>Banking (IBPS/SBI)</option>
+                    <option value="Defense" {% if profile.preferred_category == 'Defense' %}selected{% endif %}>Defense & Police</option>
+                    <option value="State PSC" {% if profile.preferred_category == 'State PSC' %}selected{% endif %}>State PSC</option>
+                    <option value="Teaching" {% if profile.preferred_category == 'Teaching' %}selected{% endif %}>Teaching / Education</option>
+                </select>
+            </div>
+
+            <div class="form-grp">
+                <label><i class="fa-solid fa-id-card"></i> Caste Category (Relaxation)</label>
+                <select name="caste_category" class="form-ctrl">
+                    <option value="General" {% if profile.caste_category == 'General' %}selected{% endif %}>General / UR</option>
+                    <option value="OBC" {% if profile.caste_category == 'OBC' %}selected{% endif %}>OBC (3 Yrs Relaxation)</option>
+                    <option value="SC_ST" {% if profile.caste_category == 'SC_ST' %}selected{% endif %}>SC / ST (5 Yrs Relaxation)</option>
+                    <option value="EWS" {% if profile.caste_category == 'EWS' %}selected{% endif %}>EWS</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="fa-solid fa-floppy-disk"></i> Save Preferences
+            </button>
+        </form>
+    </div>
+
+    <!-- RIGHT: MATCHED & SAVED JOBS -->
+    <div>
+        <div class="profile-card" style="margin-bottom: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:16px; font-weight:800; color:#0f172a;">Personalized Job Matches</h3>
+                <span style="font-size:11px; background:#eff6ff; color:#2563eb; padding:3px 10px; border-radius:12px; font-weight:700;">{{ matched_jobs.count }} Matched</span>
+            </div>
+
+            {% for job in matched_jobs %}
+                <div style="border: 1px solid #f1f5f9; background:#fafafa; border-radius:10px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <b style="font-size:14px; color:#0f172a;">{{ job.title }}</b>
+                        <p style="font-size:12px; color:#64748b; margin-top:2px;">{{ job.department }} • Eligibility: {{ job.qualification }}</p>
+                    </div>
+                    <a href="{{ job.apply_url }}" target="_blank" style="background:#2563eb; color:white; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none;">Apply &rarr;</a>
+                </div>
+            {% empty %}
+                <p style="font-size:12px; color:#94a3b8;">No jobs matching your profile preference at this moment.</p>
+            {% endfor %}
+        </div>
+
+        <div class="profile-card">
+            <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:14px;"><i class="fa-solid fa-bookmark" style="color:#2563eb;"></i> Saved Jobs ({{ saved_jobs.count }})</h3>
+            {% for item in saved_jobs %}
+                <div style="border: 1px solid #f1f5f9; border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; font-weight:700; color:#1e293b;">{{ item.job.title }}</span>
+                    <div style="display:flex; gap:10px; font-size:12px;">
+                        <a href="{{ item.job.apply_url }}" target="_blank" style="color:#2563eb; font-weight:700; text-decoration:none;">Apply</a>
+                        <a href="{% url 'bookmark_job' item.job.id %}" style="color:#ef4444;"><i class="fa-solid fa-trash-can"></i></a>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="font-size:12px; color:#94a3b8;">No saved jobs yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
